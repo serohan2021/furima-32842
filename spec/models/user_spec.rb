@@ -5,8 +5,8 @@ RSpec.describe User, type: :model do
     @user = FactoryBot.build(:user)
   end
 
-  describe 'ユーザー新規登録/ユーザー情報' do
-    context '正常テスト' do
+  describe '正常系テスト' do
+    context 'ユーザー新規登録/ユーザー情報' do
       it '全ての項目に正しい値を入力すれば登録できる' do
         expect(@user).to be_valid
       end
@@ -22,7 +22,52 @@ RSpec.describe User, type: :model do
       end
     end
 
-    context '異常テスト' do
+    context 'ユーザー新規登録/本人情報確認' do
+      it 'ユーザー本名（苗字）は、全角（漢字）での入力で登録できる' do
+        @user.last_name = '漢字'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名（苗字）は、全角（ひらがな）入力で登録できる' do
+        @user.last_name = 'ひらがな'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名（苗字）は、全角（カタカナ）入力で登録できる' do
+        @user.last_name = 'カタカナ'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名（名前）は、全角（漢字）入力で登録できる' do
+        @user.first_name = '太郎'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名（名前）は、全角（ひらがな）入力で登録できる' do
+        @user.first_name = 'たろう'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名（名前）は、全角（カタカナ）入力で登録できる' do
+        @user.first_name = 'タロウ'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名のフリガナ（苗字）は、全角（カタカナ）入力で登録できる' do
+        @user.last_name_kana = 'ミョウジ'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名のフリガナ（名前）は、全角（カタカナ）入力で登録できる' do
+        @user.first_name_kana = 'ファーストネーム'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名のフリガナ（苗字）は、全角カタカナ入力で登録できる' do
+        @user.last_name_kana = 'フリガナミョウジ'
+        expect(@user).to be_valid
+      end
+      it 'ユーザー本名のフリガナ（名前）は、全角カタカナ入力で登録できる' do
+        @user.first_name_kana = 'フリガナナマエ'
+        expect(@user).to be_valid
+      end
+    end
+  end
+
+  describe '異常系テスト' do
+    context 'ユーザー新規登録/ユーザー情報' do
       it 'ニックネームが空では登録できない' do
         @user.nickname = ''
         @user.valid?
@@ -97,53 +142,8 @@ RSpec.describe User, type: :model do
         expect(@user.errors.full_messages).to include("Password confirmation doesn't match Password")
       end
     end
-  end
 
-  describe 'ユーザー新規登録/本人情報確認' do
-    context '正常テスト' do
-      it 'ユーザー本名（苗字）は、全角（漢字）での入力で登録できる' do
-        @user.last_name = '漢字'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名（苗字）は、全角（ひらがな）入力で登録できる' do
-        @user.last_name = 'ひらがな'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名（苗字）は、全角（カタカナ）入力で登録できる' do
-        @user.last_name = 'カタカナ'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名（名前）は、全角（漢字）入力で登録できる' do
-        @user.first_name = '太郎'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名（名前）は、全角（ひらがな）入力で登録できる' do
-        @user.first_name = 'たろう'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名（名前）は、全角（カタカナ）入力で登録できる' do
-        @user.first_name = 'タロウ'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名のフリガナ（苗字）は、全角（カタカナ）入力で登録できる' do
-        @user.last_name_kana = 'ミョウジ'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名のフリガナ（名前）は、全角（カタカナ）入力で登録できる' do
-        @user.first_name_kana = 'ファーストネーム'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名のフリガナ（苗字）は、全角カタカナ入力で登録できる' do
-        @user.last_name_kana = 'フリガナミョウジ'
-        expect(@user).to be_valid
-      end
-      it 'ユーザー本名のフリガナ（名前）は、全角カタカナ入力で登録できる' do
-        @user.first_name_kana = 'フリガナナマエ'
-        expect(@user).to be_valid
-      end
-    end
-
-    context '異常テスト' do
+    context 'ユーザー新規登録/本人情報確認' do
       it 'ユーザー本名は、名字が空では登録できない' do
         @user.last_name = ''
         @user.valid?
@@ -169,7 +169,7 @@ RSpec.describe User, type: :model do
         @user.valid?
         expect(@user.errors.full_messages).to include("Last name kana can't be blank")
       end
-      it 'ユーザー本名（名前）のフリガナは、名前が空では登録できない' do
+      it 'ユーザー本名のフリガナは、名前が空では登録できない' do
         @user.first_name_kana = ''
         @user.valid?
         expect(@user.errors.full_messages).to include("First name kana can't be blank")
