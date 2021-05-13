@@ -42,6 +42,12 @@ RSpec.describe Item, type: :model do
   end
 
   describe '異常系テスト' do
+    it 'userが存在しないと登録できない' do
+      @item.user = nil
+      @item.valid?
+      expect(@item.errors.full_messages).to include("User must exist")
+    end
+
     it '商品画像を1枚つけなければ、商品の出品ができない' do
       @item.image = nil
       @item.valid?
