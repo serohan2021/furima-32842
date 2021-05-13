@@ -6,9 +6,9 @@ class Item < ApplicationRecord
     validates :image
     validates :name,        length: { maximum: 40 }
     validates :description, length: { maximum: 1000 }
-    validates :price, inclusion: { in: 300..9_999_999 }, format: { with: /\A[0-9]+\z/ }
+    validates :price, numericality: { only_integer: true, greater_than_or_equal_to: 300, less_than_or_equal_to: 9999999 }
 
-    with_options numericality: { other_than: 1 } do
+    with_options numericality: { only_integer: true, other_than: 1 } do
       validates :category_id
       validates :condition_id
       validates :postage_type_id

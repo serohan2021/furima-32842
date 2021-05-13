@@ -147,43 +147,43 @@ RSpec.describe Item, type: :model do
     it '価格が、¥300より小さい額では商品の出品ができない' do
       @item.price = 200
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price must be greater than or equal to 300')
     end
 
     it '価格が、¥9,999,999より大きい額では商品の出品ができない' do
       @item.price = 39999999
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price must be less than or equal to 9999999')
     end
 
     it '販売価格は半角英字のみの入力では、商品の出品ができない' do
       @item.price = 'asdfghjk'
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price is not a number')
     end
 
     it '販売価格は半角英数字混合では、商品の出品ができない' do
       @item.price = '123asdfghjk'
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price is not a number')
     end
 
     it '販売価格は全角数字では、商品の出品ができない' do
       @item.price = '３０００'
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price is not a number')
     end
 
     it '販売価格は全角英数字では、商品の出品ができない' do
       @item.price = 'ａａａ３０００'
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price is not a number')
     end
 
     it '販売価格は全角漢数字では、商品の出品ができない' do
       @item.price = '五六〇〇'
       @item.valid?
-      expect(@item.errors.full_messages).to include('Price is not included in the list')
+      expect(@item.errors.full_messages).to include('Price is not a number')
     end
   end
 end
