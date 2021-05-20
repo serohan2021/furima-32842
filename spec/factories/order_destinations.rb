@@ -7,7 +7,5 @@ FactoryBot.define do
     building_name  { 'フェニックス南阿佐ヶ谷' }
     phone_number   { Faker::Number.number(digits: 11) }
     token          { 'tok_abcdefghijk00000000000000000' }
-    item_id        { Faker::Number.between(from: 1, to: 10) }
-    user_id        { Faker::Number.between(from: 1, to: 10) }
   end
 end

@@ -2,7 +2,12 @@ require 'rails_helper'
 
 RSpec.describe OrderDestination, type: :model do
   before do
-    @order_destination = FactoryBot.build(:order_destination)
+    @user = FactoryBot.create(:user)
+    @item = FactoryBot.build(:item)
+    @item.image = fixture_file_upload('public/images/test_image.png')
+    @item.save
+    @order_destination = FactoryBot.build(:order_destination, user_id: @user.id, item_id: @item.id)
+    sleep 0.1
   end
 
   describe '正常系テスト' do
